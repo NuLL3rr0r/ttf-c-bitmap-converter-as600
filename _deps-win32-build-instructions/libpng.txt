@@ -1,0 +1,10 @@
+1. In the build directory:
+    // debug build
+    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DCMAKE_INCLUDE_PATH=\PATH\TO\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=\PATH\TO\_deps-win32\mingw\lib\debug -DCMAKE_FRAMEWORK_PATH=\PATH\TO\_deps-win32\mingw\share ..\
+    mingw32-make install -j9
+    // release build
+    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=\PATH\TO\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=\PATH\TO\_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=\PATH\TO\_deps-win32\mingw\share ..\
+    mingw32-make install -j9
+
+2. Cut everything in C:/Program Files (x86)/libpng/ and place it where you want.
+

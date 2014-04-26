@@ -1,0 +1,11 @@
+1. In the build directory:
+    // debug build
+    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS:BOOL=true ..\
+    mingw32-make install -j9
+    // release build
+    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=true ..\
+    mingw32-make install -j9
+
+
+2. Cut everything in C:/Program Files (x86)/freetype/ and place it where you want.
+

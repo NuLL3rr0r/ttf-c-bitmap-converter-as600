@@ -1,0 +1,38 @@
+# NOTE: WE NEED MASM BEFORE PROCEED ANY FURTHER
+# https://svn.boost.org/trac/boost/ticket/7262
+
+1. In boost source tree:
+    cd .\tools\build\v2\engine\
+    .\build.bat mingw
+    move .\bin.ntx86\bjam.exe ..\..\..\..\
+    cd ..\..\..\..\
+    mkdir .\build_deb
+    mkdir .\build_rel
+
+2. For more info and available libs:
+    * bjam --help
+    * bjam --show-libraries
+
+3. To strat the build process:
+
+/// NOTE: Use absolute path for ZLIB_SOURCE
+
+/// NONE-TAGGED VERSION
+bjam toolset=gcc variant=debug --layout=system threading=multi link=shared runtime-link=shared --build-dir=".\build_deb" --prefix="C:\Boost_deb" --without-mpi --without-python -sZLIB_SOURCE="D:\zlib-1.2.8" install
+
+bjam toolset=gcc variant=release --layout=system threading=multi link=shared runtime-link=shared --build-dir=".\build_rel" --prefix="C:\Boost_rel" --without-mpi --without-python -sZLIB_SOURCE="D:\zlib-1.2.8" install
+
+
+/// Shared version
+bjam toolset=gcc --build-type=minimal threading=multi link=shared runtime-link=shared --build-dir=".\build" --prefix="C:\Boost" --without-mpi --without-python -sZLIB_SOURCE="D:\zlib-1.2.8" install
+
+/// Static version
+bjam toolset=gcc --build-type=minimal threading=multi link=static runtime-link=static --build-dir=".\build" --prefix="C:\Boost" --without-mpi --without-python -sZLIB_SOURCE="D:\zlib-1.2.8" install
+
+/// Complete version
+bjam toolset=gcc -sZLIB_SOURCE="D:\zlib-1.2.8" --build-type=complete --build-dir=".\build" --prefix="C:\Boost" --without-mpi --without-python install
+
+4. Now, (for both DEB and REL variants)
+copy D:\Dev\Boost\include\* to our include dir
+copy D:\Dev\Boost\lib\* to our lib dir
+

@@ -1,0 +1,18 @@
+* YOU PROBABLY NEED TO MAKE A COPY OF MINGW32-MAKE.EXE -> make.exe for this to work
+* You will need Git-bash for perl.exe, sh.exe, etc. (Note: Install it somewhere without space in the path or you may get errors in configure or make stages)
+
+1. In fftw-3.3.4 dir
+    sh configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2
+    mingw32-make -j9
+
+2. copy all the needed files in .lib folder and all include files to destination.
+debug/libfftw3.dll.a
+debug/libfftw3-3.dll
+release/libfftw3.dll.a
+release/libfftw3-3.dll
+include/fftw3.f
+include/fftw3.f03
+include/fftw3.h
+include/fftw3l.f03
+include/fftw3q.f03
+
