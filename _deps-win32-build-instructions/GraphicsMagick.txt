@@ -28,3 +28,13 @@
     # Q8
     cd release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/release CPPFLAGS="-DNDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib"
 
+3. Rename the following:
+    bin/libGraphicsMagick++-3.dll to bin/libGraphicsMagick++.dll
+    bin/libGraphicsMagick-3.dll to bin/libGraphicsMagick.dll
+    bin/libGraphicsMagickWand-2.dll to bin/libGraphicsMagickWand.dll
+
+4. Copy the following:
+    D:\build\release\include\* to our include dir
+    D:\build\release\bin\*.dll to our rel-lib dir
+    D:\build\debug\bin\*.dll to our deb-lib dir
+
