@@ -1,10 +1,17 @@
 1. In the build directory:
-    // debug build
-    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DCMAKE_INCLUDE_PATH=\PATH\TO\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=\PATH\TO\_deps-win32\mingw\lib\debug -DCMAKE_FRAMEWORK_PATH=\PATH\TO\_deps-win32\mingw\share ..\
-    mingw32-make install -j9
-    // release build
-    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=\PATH\TO\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=\PATH\TO\_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=\PATH\TO\_deps-win32\mingw\share ..\
-    mingw32-make install -j9
 
-2. Cut everything in C:/Program Files (x86)/libpng/ and place it where you want.
+    mkdir debug release
+
+    # debug build
+    cd debug && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DCMAKE_INCLUDE_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\lib\debug -DCMAKE_FRAMEWORK_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\share -DCMAKE_INSTALL_PREFIX=D:\build\debug ..\
+    mingw32-make -j9 && mingw32-make install
+
+    # release build
+    cd debug && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\share -DCMAKE_INSTALL_PREFIX=D:\build\release ..\
+    mingw32-make -j9 && mingw32-make install
+
+2. Copy the following:
+    D:\build\release\include\* to our include dir
+    D:\build\release\bin\*.dll to our deb-lib dir
+    D:\build\debug\bin\*.dll to our rel-lib dir
 

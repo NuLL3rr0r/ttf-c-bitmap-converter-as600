@@ -1,18 +1,17 @@
-* YOU PROBABLY NEED TO MAKE A COPY OF MINGW32-MAKE.EXE -> make.exe for this to work
-* You will need Git-bash for perl.exe, sh.exe, etc. (Note: Install it somewhere without space in the path or you may get errors in configure or make stages)
+1. In MSYS shell:
 
-1. In fftw-3.3.4 dir
-    sh configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2
-    mingw32-make -j9
+    mkdir debug release
 
-2. copy all the needed files in .lib folder and all include files to destination.
-debug/libfftw3.dll.a
-debug/libfftw3-3.dll
-release/libfftw3.dll.a
-release/libfftw3-3.dll
-include/fftw3.f
-include/fftw3.f03
-include/fftw3.h
-include/fftw3l.f03
-include/fftw3q.f03
+    # debug build
+    cd debug && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/debug CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    make -j9 && make install
+
+    # release build
+    cd release && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/release CPPFLAGS=-DNDEBUG
+    make -j9 && make install
+
+2. Copy the following:
+    D:\build\release\include\* to our include dir
+    D:\build\release\bin\*.dll to our rel-lib dir
+    D:\build\debug\bin\*.dll to our deb-lib dir
 

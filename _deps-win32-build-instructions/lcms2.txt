@@ -1,1 +1,19 @@
-FAILED
+1. In MSYS shell:
+
+    mkdir debug release
+
+    # debug build
+    cd debug && ../configure --prefix=/d/build/debug CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    make -j9 && make install
+
+    # release build
+    cd release && ../configure --prefix=/d/build/release CPPFLAGS=-DNDEBUG
+    make -j9 && make install
+
+2. Rename bin/liblcms2-2.dll to bin/liblcms2.dll
+
+3. Copy the following:
+    D:\build\release\include\* to our include dir
+    D:\build\release\bin\*.dll to our rel-lib dir
+    D:\build\debug\bin\*.dll to our deb-lib dir
+

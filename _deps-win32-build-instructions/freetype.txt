@@ -1,11 +1,17 @@
 1. In the build directory:
-    // debug build
-    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS:BOOL=true ..\
-    mingw32-make install -j9
-    // release build
-    cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=true ..\
-    mingw32-make install -j9
 
+    mkdir debug release
 
-2. Cut everything in C:/Program Files (x86)/freetype/ and place it where you want.
+    # debug build
+    cd debug && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS:BOOL=true -DCMAKE_INSTALL_PREFIX=D:\build\debug ..\
+    mingw32-make -j9 && mingw32-make install
+    
+    # release build
+    cd release && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=true -DCMAKE_INSTALL_PREFIX=D:\build\release ..\
+    mingw32-make -j9 && mingw32-make install
+
+2. Copy the following:
+    D:\build\release\include\* to our include dir
+    D:\build\release\bin\*.dll to our deb-lib dir
+    D:\build\debug\bin\*.dll to our rel-lib dir
 
