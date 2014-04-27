@@ -1,3 +1,5 @@
+#include <bitset>
+#include <sstream>
 #include <boost/filesystem/path.hpp>
 #include <Magick++.h>
 #include <QtCore/QDebug>
@@ -9,39 +11,174 @@
 
 #define         BASE_IMAGE_SIZE                 96.0
 #define         PREVIEW_FILE_NAME               L"preview.png"
+#define         GLYPH_FILE_NAME                 L"glyph%1.png"
 
 using namespace std;
 using namespace boost;
 using namespace Magick;
 
-std::vector<std::wstring> MainWindow::s_glyphs {
-    L"۰",
-    L"۱",
-    L"۲",
-    L"۳",
-    L"۴",
-    L"۵",
-    L"۶",
-    L"۷",
-    L"۸",
-    L"۹"
+const wchar_t MainWindow::s_glyphs[] = {
+    0x06F0, // ۰
+    0x06F1, // ۱
+    0x06F2, // ۲
+    0x06F3, // ۳
+    0x06F4, // ۴
+    0x06F5, // ۵
+    0x06F6, // ۶
+    0x06F7, // ۷
+    0x06F8, // ۸
+    0x06F9, // ۹
+    0xFE81, // ﺁ
+    0xFE8D, // ﺍ
+    0xFE8F, // ﺏ
+    0xFB56, // ﭖ
+    0xFE95, // ﺕ
+    0xFE99, // ﺙ
+    0xFE9D, // ﺝ
+    0xFB7A, // ﭺ
+    0xFEA1, // ﺡ
+    0xFEA5, // ﺥ
+    0xFEA9, // ﺩ
+    0xFEAB, // ﺫ
+    0xFEAD, // ﺭ
+    0xFEAF, // ﺯ
+    0xFB8A, // ﮊ
+    0xFEB1, // ﺱ
+    0xFEB5, // ﺵ
+    0xFEB9, // ﺹ
+    0xFEBD, // ﺽ
+    0xFEC1, // ﻁ
+    0xFEC5, // ﻅ
+    0xFEC9, // ﻉ
+    0xFECD, // ﻍ
+    0xFED1, // ﻑ
+    0xFED5, // ﻕ
+    0xFB8E, // ﮎ
+    0xFB92, // ﮒ
+    0xFEDD, // ﻝ
+    0xFEE1, // ﻡ
+    0xFEE5, // ﻥ
+    0xFEED, // ﻭ
+    0xFEE9, // ﻩ
+    0xFBFC, // ﯼ
+    0xFE80, // ﺀ
+    0xFE89, // ﺉ
+    0xFEFB, // ﻻ
+    0xFE91, // ﺑ
+    0xFB58, // ﭘ
+    0xFE97, // ﺗ
+    0xFE9B, // ﺛ
+    0xFE9F, // ﺟ
+    0xFB7C, // ﭼ
+    0xFEA3, // ﺣ
+    0xFEA7, // ﺧ
+    0xFEB3, // ﺳ
+    0xFEB7, // ﺷ
+    0xFEBB, // ﺻ
+    0xFEBF, // ﺿ
+    0xFEC3, // ﻃ
+    0xFEC7, // ﻇ
+    0xFECB, // ﻋ
+    0xFECF, // ﻏ
+    0xFED3, // ﻓ
+    0xFED7, // ﻗ
+    0xFB90, // ﮐ
+    0xFB94, // ﮔ
+    0xFEDF, // ﻟ
+    0xFEE3, // ﻣ
+    0xFEE7, // ﻧ
+    0xFEEB, // ﻫ
+    0xFBFE, // ﯾ
+    0xFE80, // ﺀ
+    0xFE8B, // ﺋ
+    0xFE92, // ﺒ
+    0xFB59, // ﭙ
+    0xFE98, // ﺘ
+    0xFE9C, // ﺜ
+    0xFEA0, // ﺠ
+    0xFB7D, // ﭽ
+    0xFEA4, // ﺤ
+    0xFEA8, // ﺨ
+    0xFEB4, // ﺴ
+    0xFEB8, // ﺸ
+    0xFEBC, // ﺼ
+    0xFEC0, // ﻀ
+    0xFEC4, // ﻄ
+    0xFEC8, // ﻈ
+    0xFECC, // ﻌ
+    0xFED0, // ﻐ
+    0xFED4, // ﻔ
+    0xFED8, // ﻘ
+    0xFB91, // ﮑ
+    0xFB95, // ﮕ
+    0xFEE0, // ﻠ
+    0xFEE4, // ﻤ
+    0xFEE8, // ﻨ
+    0xFEEC, // ﻬ
+    0xFBFF, // ﯿ
+    0xFE80, // ﺀ
+    0xFE8C, // ﺌ
+    0xFE8E, // ﺎ
+    0xFE90, // ﺐ
+    0xFB57, // ﭗ
+    0xFE96, // ﺖ
+    0xFE9A, // ﺚ
+    0xFE9E, // ﺞ
+    0xFB7B, // ﭻ
+    0xFEA2, // ﺢ
+    0xFEA6, // ﺦ
+    0xFEAA, // ﺪ
+    0xFEAC, // ﺬ
+    0xFEAE, // ﺮ
+    0xFEB0, // ﺰ
+    0xFB8B, // ﮋ
+    0xFEB2, // ﺲ
+    0xFEB6, // ﺶ
+    0xFEBA, // ﺺ
+    0xFEBE, // ﺾ
+    0xFEC2, // ﻂ
+    0xFEC6, // ﻆ
+    0xFECA, // ﻊ
+    0xFECE, // ﻎ
+    0xFED2, // ﻒ
+    0xFED6, // ﻖ
+    0xFB8F, // ﮏ
+    0xFB93, // ﮓ
+    0xFEDE, // ﻞ
+    0xFEE2, // ﻢ
+    0xFEE6, // ﻦ
+    0xFEEE, // ﻮ
+    0xFEEA, // ﻪ
+    0xFBFD, // ﯽ
+    0xFE80, // ﺀ
+    0xFE8A, // ﺊ
+    0xFEFC, // ﻼ
 };
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    {
+        size_t len = sizeof(s_glyphs) / sizeof(wchar_t);
+        for (size_t i = 0; i < len; ++i) {
+            m_glyphs.push_back(QString::fromStdWString(wstring(1, s_glyphs[i])));
+        }
+    }
+
     if (m_tempDir.isValid()) {
         m_previewFilePath = QString::fromStdWString((boost::filesystem::path(m_tempDir.path().toStdWString())
                                                      / boost::filesystem::path(PREVIEW_FILE_NAME)).wstring());
+        m_glyphFilePath = QString::fromStdWString((boost::filesystem::path(m_tempDir.path().toStdWString())
+                                                   / boost::filesystem::path(GLYPH_FILE_NAME)).wstring());
     }
 
     ui->setupUi(this);
     this->setFixedSize(483, 261);
 
-    for (std::vector<std::wstring>::const_iterator it = s_glyphs.begin();
-         it != s_glyphs.end(); ++it) {
-        ui->previewComboBox->addItem(QString::fromStdWString(*it));
+    for (std::vector<QString>::const_iterator it = m_glyphs.begin();
+         it != m_glyphs.end(); ++it) {
+        ui->previewComboBox->addItem(*it);
     }
 }
 
@@ -68,7 +205,7 @@ void MainWindow::on_selectFontPushButton_clicked()
     }
 }
 
-void MainWindow::Preview()
+/*void MainWindow::GetGlyphThumb(const QString &glyph, Magick::Image &image)
 {
     list<Drawable> drawList;
 
@@ -76,17 +213,159 @@ void MainWindow::Preview()
             * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
 
     Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
-                         ui->bitmapCharSizeHSpinBox->value() * ratio), Color("white"));
+                         ui->bitmapCharSizeHSpinBox->value() * ratio),
+                Color("white"));
 
     drawList.push_back(DrawableTextAntialias(true));
     drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
-    drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE));
+    drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
+    drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
+    drawList.push_back(DrawableGravity(CenterGravity));
+    drawList.push_back(DrawableText(0, 0, glyph.toStdString()));
+
+    image.draw(drawList);
+}*/
+
+void MainWindow::Preview()
+{
+    double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
+            * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
+
+
+    Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
+                         ui->bitmapCharSizeHSpinBox->value() * ratio),
+                Color("white"));
+    list<Drawable> drawList;
+    drawList.push_back(DrawableTextAntialias(true));
+    drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
+    drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
     drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
     drawList.push_back(DrawableGravity(CenterGravity));
     drawList.push_back(DrawableText(0, 0, ui->previewComboBox->currentText().toStdString()));
-
     image.draw(drawList);
-
     image.write(m_previewFilePath.toStdString());
+
+    QPixmap preview(m_previewFilePath);
+    ui->previewLabel->setPixmap(preview);
 }
 
+void MainWindow::on_bitmapCharSizeWSpinBox_valueChanged(int arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
+void MainWindow::on_bitmapCharSizeHSpinBox_valueChanged(int arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
+void MainWindow::on_charPaddingSpinBox_valueChanged(int arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
+void MainWindow::on_previewComboBox_currentIndexChanged(int index)
+{
+    (void)index;
+    Preview();
+}
+
+void MainWindow::on_lcdOutputPushButton_clicked()
+{
+    ui->outputTextEdit->clear();
+
+    double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
+            * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
+
+    size_t glyphsImagesCount = 0;
+    for (std::vector<QString>::const_iterator it = m_glyphs.begin();
+             it != m_glyphs.end(); ++it) {
+        Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
+                             ui->bitmapCharSizeHSpinBox->value() * ratio),
+                    Color("white"));
+        list<Drawable> drawList;
+        drawList.push_back(DrawableTextAntialias(true));
+        drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
+        drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
+        drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
+        drawList.push_back(DrawableGravity(CenterGravity));
+        drawList.push_back(DrawableText(0, 0, it->toStdString()));
+        image.draw(drawList);
+        Geometry g(ui->bitmapCharSizeWSpinBox->value(), ui->bitmapCharSizeHSpinBox->value());
+        image.scale(g);
+        image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
+        ++glyphsImagesCount;
+    }
+
+    double tolerance = 1.0 - ui->colorToleranceDoubleSpinBox->value();
+    vector<vector<vector<std::string>>> glyphsBitmap;
+    for (size_t i = 0; i < glyphsImagesCount; ++i) {
+        vector<vector<std::string>> glyphBitmap;
+        Image image;
+        image.read(m_glyphFilePath.arg(i).toStdString());
+        size_t columns = image.columns();
+        size_t rows = image.rows();
+        PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
+        for ( size_t row = 0; row < rows ; ++row ) {
+            vector<std::string> rowBitmap;
+            for ( size_t column = 0; column < columns ; ++column ) {
+                ColorRGB color(pixels[columns * row + column]);
+                if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
+                    rowBitmap.push_back("1");
+                } else {
+                    rowBitmap.push_back("0");
+                }
+            }
+            glyphBitmap.push_back(rowBitmap);
+        }
+        glyphsBitmap.push_back(glyphBitmap);
+    }
+
+    vector<QString> glyphsCBitmap;
+    size_t glyphIndex = 0;
+    for (vector<vector<vector<std::string>>>::const_iterator glyphsIt = glyphsBitmap.begin();
+         glyphsIt != glyphsBitmap.end(); ++glyphsIt) {
+
+        std::string glyphCBitmap;
+        for (size_t c = 0; c < 8; ++c) {
+            std::string cBitmapUp;
+            std::string cBitmapDown;
+            for (int r = 7; r >= 0; --r) {
+                cBitmapUp += (*glyphsIt)[r][c];
+            }
+            for (size_t r = 15; r >= 8; --r) {
+                cBitmapDown += (*glyphsIt)[r][c];
+            }
+
+            bitset<8> setUp(cBitmapUp);
+            stringstream resUp;
+            resUp << hex << uppercase << setUp.to_ulong();
+            std::string hexCBitmapUp(resUp.str());
+            if (hexCBitmapUp.size() != 2)
+                hexCBitmapUp = "0" + hexCBitmapUp;
+            hexCBitmapUp = "0x" + hexCBitmapUp;
+
+            bitset<8> setDown(cBitmapDown);
+            stringstream resDown;
+            resDown << hex << uppercase << setDown.to_ulong();
+            std::string hexCBitmapDown(resDown.str());
+            if (hexCBitmapDown.size() != 2)
+                hexCBitmapDown = "0" + hexCBitmapDown;
+            hexCBitmapDown = "0x" + hexCBitmapDown;
+
+            glyphCBitmap += hexCBitmapUp + ", " + hexCBitmapDown + ", ";
+        }
+
+        glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
+                                + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
+        ++glyphIndex;
+    }
+
+    for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
+         it != glyphsCBitmap.end(); ++it) {
+        ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+    }
+}
