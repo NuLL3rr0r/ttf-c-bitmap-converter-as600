@@ -2,6 +2,7 @@
 #include <sstream>
 #include <cmath>
 #include <boost/filesystem/path.hpp>
+#include <boost/format.hpp>
 #include <Magick++.h>
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -232,7 +233,6 @@ void MainWindow::Preview()
     double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
             * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
 
-
     Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
                          ui->bitmapCharSizeHSpinBox->value() * ratio),
                 Color("white"));
@@ -278,14 +278,15 @@ void MainWindow::on_lcdOutputPushButton_clicked()
 {
     ui->outputTextEdit->clear();
 
-    double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
-            * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
+    const int COLS= ui->bitmapCharSizeWSpinBox->value();
+    const int ROWS = ui->bitmapCharSizeHSpinBox->value();
+    const double RATIO = (BASE_IMAGE_SIZE / COLS)
+            * ((double)COLS / (double)ROWS);
 
     size_t glyphsImagesCount = 0;
     for (std::vector<QString>::const_iterator it = m_glyphs.begin();
              it != m_glyphs.end(); ++it) {
-        Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
-                             ui->bitmapCharSizeHSpinBox->value() * ratio),
+        Image image(Geometry(COLS * RATIO, ROWS * RATIO),
                     Color("white"));
         list<Drawable> drawList;
         drawList.push_back(DrawableTextAntialias(true));
@@ -295,7 +296,7 @@ void MainWindow::on_lcdOutputPushButton_clicked()
         drawList.push_back(DrawableGravity(CenterGravity));
         drawList.push_back(DrawableText(0, 0, it->toStdString()));
         image.draw(drawList);
-        Geometry g(ui->bitmapCharSizeWSpinBox->value(), ui->bitmapCharSizeHSpinBox->value());
+        Geometry g(COLS, ROWS);
         image.scale(g);
         image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
         ++glyphsImagesCount;
@@ -310,9 +311,9 @@ void MainWindow::on_lcdOutputPushButton_clicked()
         size_t columns = image.columns();
         size_t rows = image.rows();
         PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
-        for ( size_t row = 0; row < rows ; ++row ) {
+        for (size_t row = 0; row < rows; ++row) {
             vector<std::string> rowBitmap;
-            for ( size_t column = 0; column < columns ; ++column ) {
+            for (size_t column = 0; column < columns; ++column) {
                 ColorRGB color(pixels[columns * row + column]);
                 if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
                     rowBitmap.push_back("1");
@@ -330,25 +331,22 @@ void MainWindow::on_lcdOutputPushButton_clicked()
     for (vector<vector<vector<std::string>>>::const_iterator glyphsIt = glyphsBitmap.begin();
          glyphsIt != glyphsBitmap.end(); ++glyphsIt) {
 
-        int cols = ui->bitmapCharSizeWSpinBox->value();
-        int rows = ui->bitmapCharSizeHSpinBox->value();
-
         std::string glyphCBitmap;
-        int verticalBytes = ceil(rows / 8.0);
-        for (int c = 0; c < cols; ++c) {
+        int verticalBytes = ceil(ROWS / 8.0);
+        for (int c = 0; c < COLS; ++c) {
             for (int b = 0; b < verticalBytes; ++b) {
                 std::string cBitmap;
                 for (int r = (((b + 1) * 8) - 1); r >= (b * 8); --r) {
-                    if (r < rows) {
+                    if (r < ROWS) {
                         cBitmap += (*glyphsIt)[r][c];
                     } else {
                         cBitmap += "0";
                     }
                 }
 
-                bitset<8> setUp(cBitmap);
+                bitset<8> set(cBitmap);
                 stringstream res;
-                res << hex << uppercase << setUp.to_ulong();
+                res << hex << uppercase << set.to_ulong();
                 std::string hexCBitmap(res.str());
                 if (hexCBitmap.size() != 2)
                     hexCBitmap = "0" + hexCBitmap;
@@ -363,6 +361,103 @@ void MainWindow::on_lcdOutputPushButton_clicked()
         ++glyphIndex;
     }
 
+    ui->outputTextEdit->setText((format("/* %1%x%2% AS600-mini LCD Font */\n")
+                                 % COLS % ROWS).str().c_str());
+    for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
+         it != glyphsCBitmap.end(); ++it) {
+        ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+    }
+}
+
+void MainWindow::on_printerOutputPushButton_clicked()
+{
+    ui->outputTextEdit->clear();
+
+    const int COLS= ui->bitmapCharSizeWSpinBox->value();
+    const int ROWS = ui->bitmapCharSizeHSpinBox->value();
+    const double RATIO = (BASE_IMAGE_SIZE / COLS)
+            * ((double)COLS / (double)ROWS);
+
+    size_t glyphsImagesCount = 0;
+    for (std::vector<QString>::const_iterator it = m_glyphs.begin();
+             it != m_glyphs.end(); ++it) {
+        Image image(Geometry(COLS * RATIO, ROWS * RATIO),
+                    Color("white"));
+        list<Drawable> drawList;
+        drawList.push_back(DrawableTextAntialias(true));
+        drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
+        drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
+        drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
+        drawList.push_back(DrawableGravity(CenterGravity));
+        drawList.push_back(DrawableText(0, 0, it->toStdString()));
+        image.draw(drawList);
+        Geometry g(COLS, ROWS);
+        image.scale(g);
+        image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
+        ++glyphsImagesCount;
+    }
+
+    double tolerance = 1.0 - ui->colorToleranceDoubleSpinBox->value();
+    vector<vector<vector<std::string>>> glyphsBitmap;
+    for (size_t i = 0; i < glyphsImagesCount; ++i) {
+        vector<vector<std::string>> glyphBitmap;
+        Image image;
+        image.read(m_glyphFilePath.arg(i).toStdString());
+        size_t columns = image.columns();
+        size_t rows = image.rows();
+        PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
+        for (size_t row = 0; row < rows; ++row) {
+            vector<std::string> rowBitmap;
+            for (size_t column = 0; column < columns; ++column) {
+                ColorRGB color(pixels[columns * row + column]);
+                if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
+                    rowBitmap.push_back("1");
+                } else {
+                    rowBitmap.push_back("0");
+                }
+            }
+            glyphBitmap.push_back(rowBitmap);
+        }
+        glyphsBitmap.push_back(glyphBitmap);
+    }
+
+    vector<QString> glyphsCBitmap;
+    size_t glyphIndex = 0;
+    for (vector<vector<vector<std::string>>>::const_iterator glyphsIt = glyphsBitmap.begin();
+         glyphsIt != glyphsBitmap.end(); ++glyphsIt) {
+
+        std::string glyphCBitmap;
+        int horizontalBytes = ceil(COLS / 8.0);
+        for (int r = 0; r < ROWS; ++r) {
+            for (int b = 0; b < horizontalBytes; ++b) {
+                std::string cBitmap;
+                for (int c = (b * 8); c < ((b + 1) * 8); ++c) {
+                    if (c < COLS) {
+                        cBitmap += (*glyphsIt)[r][c];
+                    } else {
+                        cBitmap += "0";
+                    }
+                }
+
+                bitset<8> set(cBitmap);
+                stringstream res;
+                res << hex << uppercase << set.to_ulong();
+                std::string hexCBitmap(res.str());
+                if (hexCBitmap.size() != 2)
+                    hexCBitmap = "0" + hexCBitmap;
+                hexCBitmap = "0x" + hexCBitmap;
+
+                glyphCBitmap += hexCBitmap + ", ";
+            }
+        }
+
+        glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
+                                + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
+        ++glyphIndex;
+    }
+
+    ui->outputTextEdit->setText((format("/* %1%x%2% AS600-mini Printer Font */\n")
+                                 % ROWS % COLS).str().c_str());
     for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
          it != glyphsCBitmap.end(); ++it) {
         ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");

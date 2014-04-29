@@ -40,6 +40,7 @@ private slots:
     void on_charPaddingSpinBox_valueChanged(int arg1);
     void on_previewComboBox_currentIndexChanged(int index);
     void on_lcdOutputPushButton_clicked();
+    void on_printerOutputPushButton_clicked();
 
 private:
     //void GetGlyphThumb(const QString &glyph, Magick::Image &image);
