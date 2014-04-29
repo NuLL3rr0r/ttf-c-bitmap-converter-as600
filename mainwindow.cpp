@@ -1,5 +1,6 @@
 #include <bitset>
 #include <sstream>
+#include <cmath>
 #include <boost/filesystem/path.hpp>
 #include <Magick++.h>
 #include <QtCore/QDebug>
@@ -329,34 +330,32 @@ void MainWindow::on_lcdOutputPushButton_clicked()
     for (vector<vector<vector<std::string>>>::const_iterator glyphsIt = glyphsBitmap.begin();
          glyphsIt != glyphsBitmap.end(); ++glyphsIt) {
 
+        int cols = ui->bitmapCharSizeWSpinBox->value();
+        int rows = ui->bitmapCharSizeHSpinBox->value();
+
         std::string glyphCBitmap;
-        for (size_t c = 0; c < 8; ++c) {
-            std::string cBitmapUp;
-            std::string cBitmapDown;
-            for (int r = 7; r >= 0; --r) {
-                cBitmapUp += (*glyphsIt)[r][c];
+        int verticalBytes = ceil(rows / 8.0);
+        for (int c = 0; c < cols; ++c) {
+            for (int b = 0; b < verticalBytes; ++b) {
+                std::string cBitmap;
+                for (int r = (((b + 1) * 8) - 1); r >= (b * 8); --r) {
+                    if (r < rows) {
+                        cBitmap += (*glyphsIt)[r][c];
+                    } else {
+                        cBitmap += "0";
+                    }
+                }
+
+                bitset<8> setUp(cBitmap);
+                stringstream res;
+                res << hex << uppercase << setUp.to_ulong();
+                std::string hexCBitmap(res.str());
+                if (hexCBitmap.size() != 2)
+                    hexCBitmap = "0" + hexCBitmap;
+                hexCBitmap = "0x" + hexCBitmap;
+
+                glyphCBitmap += hexCBitmap + ", ";
             }
-            for (size_t r = 15; r >= 8; --r) {
-                cBitmapDown += (*glyphsIt)[r][c];
-            }
-
-            bitset<8> setUp(cBitmapUp);
-            stringstream resUp;
-            resUp << hex << uppercase << setUp.to_ulong();
-            std::string hexCBitmapUp(resUp.str());
-            if (hexCBitmapUp.size() != 2)
-                hexCBitmapUp = "0" + hexCBitmapUp;
-            hexCBitmapUp = "0x" + hexCBitmapUp;
-
-            bitset<8> setDown(cBitmapDown);
-            stringstream resDown;
-            resDown << hex << uppercase << setDown.to_ulong();
-            std::string hexCBitmapDown(resDown.str());
-            if (hexCBitmapDown.size() != 2)
-                hexCBitmapDown = "0" + hexCBitmapDown;
-            hexCBitmapDown = "0x" + hexCBitmapDown;
-
-            glyphCBitmap += hexCBitmapUp + ", " + hexCBitmapDown + ", ";
         }
 
         glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
