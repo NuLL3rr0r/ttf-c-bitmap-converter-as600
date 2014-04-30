@@ -23,12 +23,20 @@ unix {
     LIBS += -lGraphicsMagick++
 }
 
+win32:debug {
+    LIBS += -L$$PWD/_deps-win32/mingw/lib/debug
+}
+
+win32:release {
+    LIBS += -L$$PWD/_deps-win32/mingw/lib/release
+}
+
 win32 {
     INCLUDEPATH += $$PWD/_deps-win32/mingw/include
     INCLUDEPATH += $$PWD/_deps-win32/mingw/include/GraphicsMagick/
-    debug:LIBS += -L$$PWD/_deps-win32/mingw/lib/debug
-    release:LIBS += -L$$PWD/_deps-win32/mingw/lib/release
     LIBS += -lGraphicsMagick++-3
+    #INCLUDEPATH += $$PWD/_deps-win32/mingw/include/ImageMagick-6/
+    #LIBS += -lMagick++-6.Q8-3
 }
 
 LIBS += -lboost_filesystem
