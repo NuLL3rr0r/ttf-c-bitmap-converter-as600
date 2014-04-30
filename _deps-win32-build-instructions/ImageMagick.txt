@@ -1,0 +1,61 @@
+1. Build the dependencies yourself or install bzip2, freetype, jbigkit, libintl, jpeg, libpng, libtiff, libwmf and zlib from GnuWin32. However, note that for freetype to be detected by configure, you must move the freetype directory out of GnuWin32\include\freetype2 and into GnuWin32\include.
+
+2. In MSYS shell:
+    mkdir _debug _release
+
+######## freetype2.pc
+prefix=D:/dev/TTF2CBitmap/_deps-win32/mingw
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/debug
+includedir=${prefix}/include
+
+Name: FreeType 2
+Description: A free, high-quality, and portable font engine.
+Version: 9.16.3
+Requires:
+Libs: -L${libdir} -lfreetype
+Cflags: -I${includedir}/freetype -I${includedir}
+########
+    # debug build
+    # Q8
+    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --without-perl --disable-installed --prefix=/d/build/_debug-ImageMagick CPPFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug" CFLAGS="-g -O0" CXXFLAGS="-g -O0" PKG_CONFIG_PATH="d:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug/pkgconfig"
+    # Q16
+    #cd debug && ../configure --enable-shared --disable-static --with-quantum-depth=16 --without-perl --disable-installed --prefix=/d/build/_debug-ImageMagick CPPFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug" CFLAGS="-g -O0" CXXFLAGS="-g -O0" PKG_CONFIG_PATH="d:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug/pkgconfig"
+    make -j9 && make install
+
+######## freetype2.pc
+prefix=D:/dev/TTF2CBitmap/_deps-win32/mingw
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/release
+includedir=${prefix}/include
+
+Name: FreeType 2
+Description: A free, high-quality, and portable font engine.
+Version: 9.16.3
+Requires:
+Libs: -L${libdir} -lfreetype
+Cflags: -I${includedir}/freetype -I${includedir}
+########
+    # release build
+    # Q8
+    cd _release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --without-perl --disable-installed --prefix=/d/build/_release-ImageMagick CPPFLAGS="-DNDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release" PKG_CONFIG_PATH="d:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release/pkgconfig"
+    # Q16
+    #cd release && ../configure --enable-shared --disable-static --with-quantum-depth=16 --without-perl --disable-installed --prefix=/d/build/_release-ImageMagick CPPFLAGS="-DNDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release" PKG_CONFIG_PATH="d:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release/pkgconfig"
+    make -j9 && make install
+
+
+### with GnuWin32 deps ###
+
+    # debug build
+    # Q8
+    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_debug-ImageMagick CPPFLAGS="-DDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib" CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+
+    # release build
+    # Q8
+    cd _release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_release-ImageMagick CPPFLAGS="-DNDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib"
+
+3. Copy the following:
+    D:\build\release\include\* to our include dir
+    D:\build\release\bin\*.dll to our rel-lib dir
+    D:\build\debug\bin\*.dll to our deb-lib dir
+

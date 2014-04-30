@@ -1,13 +1,13 @@
 1. In the build directory:
 
-    mkdir debug release
+    mkdir _debug _release
 
     # debug build
-    cd debug && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS:BOOL=true -DCMAKE_INSTALL_PREFIX=D:\build\debug ..\
+    cd _debug && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS:BOOL=true -DCMAKE_INSTALL_PREFIX=D:\build\_debug-freetype ..\
     mingw32-make -j9 && mingw32-make install
     
     # release build
-    cd release && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=true -DCMAKE_INSTALL_PREFIX=D:\build\release ..\
+    cd _release && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=true -DCMAKE_INSTALL_PREFIX=D:\build\_release-freetype ..\
     mingw32-make -j9 && mingw32-make install
 
 2. Copy the following:

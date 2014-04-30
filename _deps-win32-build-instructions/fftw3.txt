@@ -1,13 +1,13 @@
 1. In MSYS shell:
 
-    mkdir debug release
+    mkdir _debug _release
 
-    # debug build
-    cd debug && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/debug CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    # _debug build
+    cd _debug && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/_debug-fftw3 CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
     make -j9 && make install
 
     # release build
-    cd release && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/release CPPFLAGS=-DNDEBUG
+    cd _release && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/_release-fftw3 CPPFLAGS=-DNDEBUG
     make -j9 && make install
 
 2. Copy the following:

@@ -1,13 +1,13 @@
 1. In MSYS shell:
 
-    mkdir debug release
+    mkdir _debug _release
 
     # debug build
-    cd debug && ../configure --prefix=/d/build/debug CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    cd _debug && ../configure --prefix=/d/build/_debug-libiconv CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
     make -j9 && make install
 
     # release build
-    cd release && ../configure --prefix=/d/build/release CPPFLAGS=-DNDEBUG
+    cd _release && ../configure --prefix=/d/build/_release-libiconv CPPFLAGS=-DNDEBUG
     make -j9 && make install
 
 2. Copy the following:
