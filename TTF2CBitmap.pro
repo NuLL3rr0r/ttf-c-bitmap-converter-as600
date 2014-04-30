@@ -33,10 +33,10 @@ win32:release {
 
 win32 {
     INCLUDEPATH += $$PWD/_deps-win32/mingw/include
-    INCLUDEPATH += $$PWD/_deps-win32/mingw/include/GraphicsMagick/
+    INCLUDEPATH += $$PWD/_deps-win32/mingw/include/GraphicsMagick
     LIBS += -lGraphicsMagick++-3
-    #INCLUDEPATH += $$PWD/_deps-win32/mingw/include/ImageMagick-6/
-    #LIBS += -lMagick++-6.Q8-3
+    #INCLUDEPATH += $$PWD/_deps-win32/mingw/include/ImageMagick-6
+    #LIBS += -lMagick++-6.Q8-3 -lMagickCore-6.Q8-2 -lMagickWand-6.Q8-2
 }
 
 LIBS += -lboost_filesystem
