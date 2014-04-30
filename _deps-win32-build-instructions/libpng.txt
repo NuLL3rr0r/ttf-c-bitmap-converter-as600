@@ -7,7 +7,7 @@
     mingw32-make -j9 && mingw32-make install
 
     # release build
-    cd _debug && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\share -DCMAKE_INSTALL_PREFIX=D:\build\_release-libpng ..\
+    cd _release && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\share -DCMAKE_INSTALL_PREFIX=D:\build\_release-libpng ..\
     mingw32-make -j9 && mingw32-make install
 
 2. Copy the following:
