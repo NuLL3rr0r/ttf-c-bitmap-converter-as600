@@ -10,9 +10,7 @@
     cd _release && cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\include -DCMAKE_LIBRARY_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\lib\release -DCMAKE_FRAMEWORK_PATH=D:\dev\TTF2CBitmap\_deps-win32\mingw\share -DCMAKE_INSTALL_PREFIX=D:\build\_release-libpng ..\
     mingw32-make -j9 && mingw32-make install
 
-2. Rename 'libpng16d.dll' to 'libpng16.dll' for debug build.
-
-3. Copy the following:
+2. Copy the following:
     D:\build\release\include\* to our include dir
     D:\build\release\bin\*.dll to our deb-lib dir
     D:\build\debug\bin\*.dll to our rel-lib dir
