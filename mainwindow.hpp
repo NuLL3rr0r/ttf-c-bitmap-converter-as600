@@ -43,7 +43,6 @@ private slots:
     void on_printerOutputPushButton_clicked();
 
 private:
-    //void GetGlyphThumb(const QString &glyph, Magick::Image &image);
     void Preview();
 };
 

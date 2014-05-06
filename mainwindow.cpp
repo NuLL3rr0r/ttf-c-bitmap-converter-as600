@@ -207,27 +207,6 @@ void MainWindow::on_selectFontPushButton_clicked()
     }
 }
 
-/*void MainWindow::GetGlyphThumb(const QString &glyph, Magick::Image &image)
-{
-    list<Drawable> drawList;
-
-    double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
-            * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
-
-    Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
-                         ui->bitmapCharSizeHSpinBox->value() * ratio),
-                Color("white"));
-
-    drawList.push_back(DrawableTextAntialias(true));
-    drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
-    drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
-    drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
-    drawList.push_back(DrawableGravity(CenterGravity));
-    drawList.push_back(DrawableText(0, 0, glyph.toStdString()));
-
-    image.draw(drawList);
-}*/
-
 void MainWindow::Preview()
 {
     double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
