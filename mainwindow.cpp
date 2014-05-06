@@ -240,7 +240,7 @@ void MainWindow::Preview()
     drawList.push_back(DrawableTextAntialias(true));
     drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
     drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
-    drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
+    drawList.push_back(DrawableFillColor(Color("black")));
     drawList.push_back(DrawableGravity(CenterGravity));
     drawList.push_back(DrawableText(0, 0, ui->previewComboBox->currentText().toStdString()));
     image.draw(drawList);
@@ -292,7 +292,7 @@ void MainWindow::on_lcdOutputPushButton_clicked()
         drawList.push_back(DrawableTextAntialias(true));
         drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
         drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
-        drawList.push_back(DrawableFillColor(Color(255, 255, 255, MaxRGB)));
+        drawList.push_back(DrawableFillColor(Color("black")));
         drawList.push_back(DrawableGravity(CenterGravity));
         drawList.push_back(DrawableText(0, 0, it->toStdString()));
         image.draw(drawList);

@@ -116,16 +116,29 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget1">
+   <widget class="QComboBox" name="previewComboBox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>234</width>
-      <height>27</height>
+      <x>20</x>
+      <y>70</y>
+      <width>69</width>
+      <height>22</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="bitmapCharSizeHorizontalLayout">
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>41</y>
+      <width>180</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="bitmapCharSizeLabel">
        <property name="text">
@@ -148,6 +161,12 @@
      </item>
      <item>
       <widget class="QLabel" name="bitmapCharSizeMultiplyLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>x</string>
        </property>
@@ -168,16 +187,45 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget2">
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>40</y>
+      <width>83</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="charPaddingLabel">
+       <property name="text">
+        <string>Padding</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="charPaddingSpinBox">
+       <property name="maximum">
+        <number>96</number>
+       </property>
+       <property name="value">
+        <number>24</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>370</x>
       <y>40</y>
-      <width>128</width>
-      <height>27</height>
+      <width>101</width>
+      <height>22</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="colorToleranceHorizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="colorToleranceLabel">
        <property name="text">
@@ -199,50 +247,6 @@
       </widget>
      </item>
     </layout>
-    <zorder>colorToleranceDoubleSpinBox</zorder>
-    <zorder>colorToleranceLabel</zorder>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>40</y>
-      <width>107</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="charPaddingHorizontalLayout">
-     <item>
-      <widget class="QLabel" name="charPaddingLabel">
-       <property name="text">
-        <string>Padding</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="charPaddingSpinBox">
-       <property name="maximum">
-        <number>96</number>
-       </property>
-       <property name="value">
-        <number>24</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QComboBox" name="previewComboBox">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>69</width>
-      <height>22</height>
-     </rect>
-    </property>
    </widget>
    <zorder>layoutWidget1</zorder>
    <zorder>layoutWidget2</zorder>

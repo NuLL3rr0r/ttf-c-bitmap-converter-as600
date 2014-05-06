@@ -16,22 +16,21 @@ QMAKE_CXXFLAGS += -std=c++11
 unix {
     INCLUDEPATH += /usr/include
     INCLUDEPATH += /usr/local/include
-    INCLUDEPATH += /usr/include/GraphicsMagick/
-    INCLUDEPATH += /usr/local/include/GraphicsMagick/
+    INCLUDEPATH += /usr/include/GraphicsMagick
+    INCLUDEPATH += /usr/local/include/GraphicsMagick
     LIBS += -L/usr/lib
     LIBS += -L/usr/local/lib
     LIBS += -lGraphicsMagick++
 }
 
-win32:debug {
-    LIBS += -L$$PWD/_deps-win32/mingw/lib/debug
-}
-
-win32:release {
-    LIBS += -L$$PWD/_deps-win32/mingw/lib/release
-}
-
 win32 {
+    debug {
+        LIBS += -L$$PWD/_deps-win32/mingw/lib/debug
+    }
+    release {
+        LIBS += -L$$PWD/_deps-win32/mingw/lib/release
+    }
+
     INCLUDEPATH += $$PWD/_deps-win32/mingw/include
     INCLUDEPATH += $$PWD/_deps-win32/mingw/include/GraphicsMagick
     LIBS += -lGraphicsMagick++-3
