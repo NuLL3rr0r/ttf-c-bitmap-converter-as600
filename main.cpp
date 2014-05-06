@@ -22,8 +22,6 @@ int main(int argc, char *argv[])
 #if defined ( _WIN32 )
     /*! We shoule do this, or, we'll crash */
 
-    const std::string MGK_TYPE_FILE_NAME();
-    const std::string MGK_TYPE_FILE_NAME();
     const std::string MGK_TYPE_FILE(
                 (boost::filesystem::path(
                      boost::filesystem::path(appPath)
