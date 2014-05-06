@@ -20,14 +20,25 @@ int main(int argc, char *argv[])
     boost::filesystem::current_path(appPath);
 
 #if defined ( _WIN32 )
+    /*! We shoule do this, or, we'll crash */
+
+    const std::string MGK_TYPE_FILE_NAME();
+    const std::string MGK_TYPE_FILE_NAME();
     const std::string MGK_TYPE_FILE(
                 (boost::filesystem::path(
                      boost::filesystem::path(appPath)
-                     / boost::filesystem::path("type.mgk")).string()));
+                     / boost::filesystem::path("type."
+                                           #if defined ( MAGICKPP_IS_GM )
+                                               "mgk"
+                                           #elif defined ( MAGICKPP_IS_IM )
+                                               "xml"
+                                           #endif /* defined ( MAGICKPP_IS_GM ) */
+                                               )).string()));
+
     if (!boost::filesystem::exists(MGK_TYPE_FILE)) {
         std::ofstream outFile(MGK_TYPE_FILE);
         if (outFile.is_open()) {
-            outFile << "<?xml version=\"1.0\"?>" << std::endl
+            outFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl
                     << "<typemap>" << std::endl
                     << std::endl
                     << "</typemap>" << std::endl;

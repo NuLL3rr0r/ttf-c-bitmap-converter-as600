@@ -31,10 +31,19 @@ win32 {
         LIBS += -L$$PWD/_deps-win32/mingw/lib/release
     }
 
-    INCLUDEPATH += $$PWD/_deps-win32/mingw/include
-    INCLUDEPATH += $$PWD/_deps-win32/mingw/include/GraphicsMagick
+    QMAKE_CFLAGS += -isystem $$PWD/_deps-win32/mingw/include
+    QMAKE_CXXFLAGS += -isystem $$PWD/_deps-win32/mingw/include
+
+    DEFINES += MAGICKPP_IS_GM
+    QMAKE_CFLAGS += -isystem $$PWD/_deps-win32/mingw/include/GraphicsMagick
+    QMAKE_CXXFLAGS += -isystem $$PWD/_deps-win32/mingw/include/GraphicsMagick
     LIBS += -lGraphicsMagick++-3
-    #INCLUDEPATH += $$PWD/_deps-win32/mingw/include/ImageMagick-6
+
+    #DEFINES += MAGICKPP_IS_IM
+    #DEFINES += MAGICKCORE_QUANTUM_DEPTH=8
+    #DEFINES += MAGICKCORE_HDRI_ENABLE=FALSE
+    #QMAKE_CFLAGS += -isystem $$PWD/_deps-win32/mingw/include/ImageMagick-6
+    #QMAKE_CXXFLAGS += -isystem $$PWD/_deps-win32/mingw/include/ImageMagick-6
     #LIBS += -lMagick++-6.Q8-3 -lMagickCore-6.Q8-2 -lMagickWand-6.Q8-2
 }
 

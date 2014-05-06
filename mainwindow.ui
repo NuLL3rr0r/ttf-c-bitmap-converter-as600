@@ -248,16 +248,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>layoutWidget1</zorder>
-   <zorder>layoutWidget2</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>fontPathLineEdit</zorder>
-   <zorder>selectFontPushButton</zorder>
-   <zorder>outputTextEdit</zorder>
-   <zorder>lcdOutputPushButton</zorder>
-   <zorder>printerOutputPushButton</zorder>
-   <zorder>previewLabel</zorder>
-   <zorder>previewComboBox</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
