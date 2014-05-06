@@ -361,8 +361,8 @@ void MainWindow::on_lcdOutputPushButton_clicked()
         ++glyphIndex;
     }
 
-    ui->outputTextEdit->setText((format("/* %1%x%2% AS600-mini LCD Font */\n")
-                                 % COLS % ROWS).str().c_str());
+    ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini LCD Font */\n")
+                                 % COLS % ROWS % (ceil(ROWS / 8.0) * COLS)).str().c_str());
     for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
          it != glyphsCBitmap.end(); ++it) {
         ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
@@ -456,8 +456,8 @@ void MainWindow::on_printerOutputPushButton_clicked()
         ++glyphIndex;
     }
 
-    ui->outputTextEdit->setText((format("/* %1%x%2% AS600-mini Printer Font */\n")
-                                 % ROWS % COLS).str().c_str());
+    ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini Printer Font */\n")
+                                 % ROWS % COLS % (ceil(COLS / 8.0) * ROWS)).str().c_str());
     for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
          it != glyphsCBitmap.end(); ++it) {
         ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
