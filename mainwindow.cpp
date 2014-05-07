@@ -307,8 +307,8 @@ void MainWindow::on_lcdOutputPushButton_clicked()
 
     vector<QString> glyphsCBitmap;
     size_t glyphIndex = 0;
-    for (vector<vector<vector<std::string>>>::const_iterator glyphsIt = glyphsBitmap.begin();
-         glyphsIt != glyphsBitmap.end(); ++glyphsIt) {
+    for (vector<vector<vector<std::string>>>::const_iterator it = glyphsBitmap.begin();
+         it != glyphsBitmap.end(); ++it) {
 
         std::string glyphCBitmap;
         int verticalBytes = ceil(ROWS / 8.0);
@@ -317,7 +317,7 @@ void MainWindow::on_lcdOutputPushButton_clicked()
                 std::string cBitmap;
                 for (int r = (((b + 1) * 8) - 1); r >= (b * 8); --r) {
                     if (r < ROWS) {
-                        cBitmap += (*glyphsIt)[r][c];
+                        cBitmap += (*it)[r][c];
                     } else {
                         cBitmap += "0";
                     }
@@ -402,8 +402,8 @@ void MainWindow::on_printerOutputPushButton_clicked()
 
     vector<QString> glyphsCBitmap;
     size_t glyphIndex = 0;
-    for (vector<vector<vector<std::string>>>::const_iterator glyphsIt = glyphsBitmap.begin();
-         glyphsIt != glyphsBitmap.end(); ++glyphsIt) {
+    for (vector<vector<vector<std::string>>>::const_iterator it = glyphsBitmap.begin();
+         it != glyphsBitmap.end(); ++it) {
 
         std::string glyphCBitmap;
         int horizontalBytes = ceil(COLS / 8.0);
@@ -412,7 +412,7 @@ void MainWindow::on_printerOutputPushButton_clicked()
                 std::string cBitmap;
                 for (int c = (b * 8); c < ((b + 1) * 8); ++c) {
                     if (c < COLS) {
-                        cBitmap += (*glyphsIt)[r][c];
+                        cBitmap += (*it)[r][c];
                     } else {
                         cBitmap += "0";
                     }
