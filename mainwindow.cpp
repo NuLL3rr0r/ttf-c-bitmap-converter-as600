@@ -4,6 +4,7 @@
 #include <cmath>
 #include <boost/filesystem/path.hpp>
 #include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 #include <Magick++.h>
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -315,7 +316,7 @@ void MainWindow::on_previewComboBox_currentIndexChanged(int index)
 void MainWindow::on_lcdOutputPushButton_clicked()
 {
     try {
-        ui->outputTextEdit->clear();
+        ui->outputBitmapCharsTextEdit->clear();
 
         const int COLS= ui->bitmapCharSizeWSpinBox->value();
         const int ROWS = ui->bitmapCharSizeHSpinBox->value();
@@ -405,11 +406,11 @@ void MainWindow::on_lcdOutputPushButton_clicked()
             ++glyphIndex;
         }
 
-        ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini LCD Font */\n")
+        ui->outputBitmapCharsTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini LCD Font */\n")
                                      % COLS % ROWS % (ceil(ROWS / 8.0) * COLS)).str().c_str());
         for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
              it != glyphsCBitmap.end(); ++it) {
-            ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+            ui->outputBitmapCharsTextEdit->setText(ui->outputBitmapCharsTextEdit->toPlainText() + (*it) + "\n");
         }
     }
 
@@ -437,7 +438,23 @@ void MainWindow::on_lcdOutputPushButton_clicked()
 void MainWindow::on_printerOutputPushButton_clicked()
 {
     try {
-        ui->outputTextEdit->clear();
+        ui->outputBitmapCharsCodeTextEdit->clear();
+        ui->outputBitmapCharsTextEdit->clear();
+
+        {
+            size_t i = 0;
+            for (std::vector<QString>::const_iterator it = m_glyphs.begin();
+                 it != m_glyphs.end(); ++it) {
+                wstringstream code;
+                code << hex << uppercase << (size_t)it->toStdWString()[0];
+                ui->outputBitmapCharsCodeTextEdit->setText(
+                            QString::fromStdWString((wformat(L"%3%0x80,0x%1% // %2%\n")
+                             % code.str()
+                             % it->toStdWString()
+                             % ui->outputBitmapCharsCodeTextEdit->toPlainText().toStdWString()).str().c_str()));
+                ++i;
+            }
+        }
 
         const int COLS= ui->bitmapCharSizeWSpinBox->value();
         const int ROWS = ui->bitmapCharSizeHSpinBox->value();
@@ -527,11 +544,11 @@ void MainWindow::on_printerOutputPushButton_clicked()
             ++glyphIndex;
         }
 
-        ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini Printer Font */\n")
+        ui->outputBitmapCharsTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini Printer Font */\n")
                                      % ROWS % COLS % (ceil(COLS / 8.0) * ROWS)).str().c_str());
         for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
              it != glyphsCBitmap.end(); ++it) {
-            ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+            ui->outputBitmapCharsTextEdit->setText(ui->outputBitmapCharsTextEdit->toPlainText() + (*it) + "\n");
         }
     }
 
