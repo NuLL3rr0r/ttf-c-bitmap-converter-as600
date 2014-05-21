@@ -210,7 +210,8 @@ void MainWindow::on_selectFontPushButton_clicked()
 void MainWindow::Preview()
 {
     double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
-            * ((double)ui->bitmapCharSizeWSpinBox->value() / (double)ui->bitmapCharSizeHSpinBox->value());
+            * ((double)ui->bitmapCharSizeWSpinBox->value()
+               / (double)ui->bitmapCharSizeHSpinBox->value());
 
     Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
                          ui->bitmapCharSizeHSpinBox->value() * ratio),
@@ -221,7 +222,9 @@ void MainWindow::Preview()
     drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
     drawList.push_back(DrawableFillColor(Color("black")));
     drawList.push_back(DrawableGravity(CenterGravity));
-    drawList.push_back(DrawableText(0, 0, ui->previewComboBox->currentText().toStdString()));
+    drawList.push_back(DrawableText(0, 0,
+                                    ui->previewComboBox->currentText().toStdString(),
+                                    "UTF-8"));
     image.draw(drawList);
     image.write(m_previewFilePath.toStdString());
 
@@ -273,7 +276,7 @@ void MainWindow::on_lcdOutputPushButton_clicked()
         drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
         drawList.push_back(DrawableFillColor(Color("black")));
         drawList.push_back(DrawableGravity(CenterGravity));
-        drawList.push_back(DrawableText(0, 0, it->toStdString()));
+        drawList.push_back(DrawableText(0, 0, it->toStdString(), "UTF-8"));
         image.draw(drawList);
         Geometry g(COLS, ROWS);
         image.scale(g);
@@ -368,7 +371,7 @@ void MainWindow::on_printerOutputPushButton_clicked()
         drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
         drawList.push_back(DrawableFillColor(Color("black")));
         drawList.push_back(DrawableGravity(CenterGravity));
-        drawList.push_back(DrawableText(0, 0, it->toStdString()));
+        drawList.push_back(DrawableText(0, 0, it->toStdString(), "UTF-8"));
         image.draw(drawList);
         Geometry g(COLS, ROWS);
         image.scale(g);
