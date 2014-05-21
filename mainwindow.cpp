@@ -160,6 +160,7 @@ const wchar_t MainWindow::s_glyphs[] = {
     0xFBFD, // ﯽ
     0xFE80, // ﺀ
     0xFE8A, // ﺊ
+    0xFEFB, // ﻻ
     0xFEFC, // ﻼ
 };
 
