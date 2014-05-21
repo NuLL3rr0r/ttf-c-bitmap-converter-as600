@@ -1,4 +1,5 @@
 #include <bitset>
+#include <exception>
 #include <sstream>
 #include <cmath>
 #include <boost/filesystem/path.hpp>
@@ -7,6 +8,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QFileDialog>
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
@@ -14,6 +16,9 @@
 #define         BASE_IMAGE_SIZE                 96.0
 #define         PREVIEW_FILE_NAME               L"preview.png"
 #define         GLYPH_FILE_NAME                 L"glyph%1.png"
+
+#define         ERROR_TITLE                     "Error"
+#define         UNKNOWN_ERROR                   "Unknown Error!"
 
 using namespace std;
 using namespace boost;
@@ -176,7 +181,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     ui->setupUi(this);
-    this->setFixedSize(483, 261);
+    //this->setFixedSize(483, 261);
 
     for (std::vector<QString>::const_iterator it = m_glyphs.begin();
          it != m_glyphs.end(); ++it) {
@@ -209,27 +214,54 @@ void MainWindow::on_selectFontPushButton_clicked()
 
 void MainWindow::Preview()
 {
-    double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
-            * ((double)ui->bitmapCharSizeWSpinBox->value()
-               / (double)ui->bitmapCharSizeHSpinBox->value());
+    try {
+        double ratio = (BASE_IMAGE_SIZE / (double)ui->bitmapCharSizeWSpinBox->value())
+                * ((double)ui->bitmapCharSizeWSpinBox->value()
+                   / (double)ui->bitmapCharSizeHSpinBox->value());
 
-    Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
-                         ui->bitmapCharSizeHSpinBox->value() * ratio),
-                Color("white"));
-    list<Drawable> drawList;
-    drawList.push_back(DrawableTextAntialias(true));
-    drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
-    drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
-    drawList.push_back(DrawableFillColor(Color("black")));
-    drawList.push_back(DrawableGravity(CenterGravity));
-    drawList.push_back(DrawableText(0, 0,
-                                    ui->previewComboBox->currentText().toStdString(),
-                                    "UTF-8"));
-    image.draw(drawList);
-    image.write(m_previewFilePath.toStdString());
+        Image image(Geometry(ui->bitmapCharSizeWSpinBox->value() * ratio,
+                             ui->bitmapCharSizeHSpinBox->value() * ratio),
+                    Color("white"));
+        list<Drawable> drawList;
+        drawList.push_back(DrawableTextAntialias(true));
+        drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
+        drawList.push_back(DrawablePointSize((BASE_IMAGE_SIZE
+                                              - (ui->charPaddingSpinBox->value()))
+                                             * ui->charScalingDoubleSpinBox->value()));
+        drawList.push_back(DrawableFillColor(Color("black")));
+        drawList.push_back(DrawableGravity(CenterGravity));
+        drawList.push_back(DrawableRotation(ui->charRotationDoubleSpinBox->value()));
+        drawList.push_back(DrawableSkewX(ui->charSkewXDoubleSpinBox->value()));
+        drawList.push_back(DrawableSkewY(ui->charSkewYDoubleSpinBox->value()));
+        drawList.push_back(DrawableText(0, 0,
+                                        ui->previewComboBox->currentText().toStdString(),
+                                        "UTF-8"));
+        image.draw(drawList);
+        image.write(m_previewFilePath.toStdString());
 
-    QPixmap preview(m_previewFilePath);
-    ui->previewLabel->setPixmap(preview);
+        QPixmap preview(m_previewFilePath);
+        ui->previewLabel->setPixmap(preview);
+    }
+
+    catch(const Magick::ErrorDraw &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const Magick::Error &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const Magick::Exception &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const std::exception &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch (...) {
+        QMessageBox::critical(this, ERROR_TITLE, UNKNOWN_ERROR);
+    }
 }
 
 void MainWindow::on_bitmapCharSizeWSpinBox_valueChanged(int arg1)
@@ -250,6 +282,30 @@ void MainWindow::on_charPaddingSpinBox_valueChanged(int arg1)
     Preview();
 }
 
+void MainWindow::on_charScalingDoubleSpinBox_valueChanged(double arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
+void MainWindow::on_charRotationDoubleSpinBox_valueChanged(double arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
+void MainWindow::on_charSkewXDoubleSpinBox_valueChanged(double arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
+void MainWindow::on_charSkewYDoubleSpinBox_valueChanged(double arg1)
+{
+    (void)arg1;
+    Preview();
+}
+
 void MainWindow::on_previewComboBox_currentIndexChanged(int index)
 {
     (void)index;
@@ -258,190 +314,245 @@ void MainWindow::on_previewComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_lcdOutputPushButton_clicked()
 {
-    ui->outputTextEdit->clear();
+    try {
+        ui->outputTextEdit->clear();
 
-    const int COLS= ui->bitmapCharSizeWSpinBox->value();
-    const int ROWS = ui->bitmapCharSizeHSpinBox->value();
-    const double RATIO = (BASE_IMAGE_SIZE / COLS)
-            * ((double)COLS / (double)ROWS);
+        const int COLS= ui->bitmapCharSizeWSpinBox->value();
+        const int ROWS = ui->bitmapCharSizeHSpinBox->value();
+        const double RATIO = (BASE_IMAGE_SIZE / COLS)
+                * ((double)COLS / (double)ROWS);
 
-    size_t glyphsImagesCount = 0;
-    for (std::vector<QString>::const_iterator it = m_glyphs.begin();
+        size_t glyphsImagesCount = 0;
+        for (std::vector<QString>::const_iterator it = m_glyphs.begin();
              it != m_glyphs.end(); ++it) {
-        Image image(Geometry(COLS * RATIO, ROWS * RATIO),
-                    Color("white"));
-        list<Drawable> drawList;
-        drawList.push_back(DrawableTextAntialias(true));
-        drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
-        drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
-        drawList.push_back(DrawableFillColor(Color("black")));
-        drawList.push_back(DrawableGravity(CenterGravity));
-        drawList.push_back(DrawableText(0, 0, it->toStdString(), "UTF-8"));
-        image.draw(drawList);
-        Geometry g(COLS, ROWS);
-        image.scale(g);
-        image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
-        ++glyphsImagesCount;
-    }
-
-    double tolerance = 1.0 - ui->colorToleranceDoubleSpinBox->value();
-    vector<vector<vector<std::string>>> glyphsBitmap;
-    for (size_t i = 0; i < glyphsImagesCount; ++i) {
-        vector<vector<std::string>> glyphBitmap;
-        Image image;
-        image.read(m_glyphFilePath.arg(i).toStdString());
-        size_t columns = image.columns();
-        size_t rows = image.rows();
-        PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
-        for (size_t row = 0; row < rows; ++row) {
-            vector<std::string> rowBitmap;
-            for (size_t column = 0; column < columns; ++column) {
-                ColorRGB color(pixels[columns * row + column]);
-                if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
-                    rowBitmap.push_back("1");
-                } else {
-                    rowBitmap.push_back("0");
-                }
-            }
-            glyphBitmap.push_back(rowBitmap);
+            Image image(Geometry(COLS * RATIO, ROWS * RATIO),
+                        Color("white"));
+            list<Drawable> drawList;
+            drawList.push_back(DrawableTextAntialias(true));
+            drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
+            drawList.push_back(DrawablePointSize((BASE_IMAGE_SIZE
+                                                  - (ui->charPaddingSpinBox->value()))
+                                                 * ui->charScalingDoubleSpinBox->value()));
+            drawList.push_back(DrawableFillColor(Color("black")));
+            drawList.push_back(DrawableGravity(CenterGravity));
+            drawList.push_back(DrawableRotation(ui->charRotationDoubleSpinBox->value()));
+            drawList.push_back(DrawableSkewX(ui->charSkewXDoubleSpinBox->value()));
+            drawList.push_back(DrawableSkewY(ui->charSkewYDoubleSpinBox->value()));
+            drawList.push_back(DrawableText(0, 0, it->toStdString(), "UTF-8"));
+            image.draw(drawList);
+            Geometry g(COLS, ROWS);
+            image.scale(g);
+            image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
+            ++glyphsImagesCount;
         }
-        glyphsBitmap.push_back(glyphBitmap);
-    }
 
-    vector<QString> glyphsCBitmap;
-    size_t glyphIndex = 0;
-    for (vector<vector<vector<std::string>>>::const_iterator it = glyphsBitmap.begin();
-         it != glyphsBitmap.end(); ++it) {
-
-        std::string glyphCBitmap;
-        int verticalBytes = ceil(ROWS / 8.0);
-        for (int c = 0; c < COLS; ++c) {
-            for (int b = 0; b < verticalBytes; ++b) {
-                std::string cBitmap;
-                for (int r = (((b + 1) * 8) - 1); r >= (b * 8); --r) {
-                    if (r < ROWS) {
-                        cBitmap += (*it)[r][c];
+        double tolerance = 1.0 - ui->colorToleranceDoubleSpinBox->value();
+        vector<vector<vector<std::string>>> glyphsBitmap;
+        for (size_t i = 0; i < glyphsImagesCount; ++i) {
+            vector<vector<std::string>> glyphBitmap;
+            Image image;
+            image.read(m_glyphFilePath.arg(i).toStdString());
+            size_t columns = image.columns();
+            size_t rows = image.rows();
+            PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
+            for (size_t row = 0; row < rows; ++row) {
+                vector<std::string> rowBitmap;
+                for (size_t column = 0; column < columns; ++column) {
+                    ColorRGB color(pixels[columns * row + column]);
+                    if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
+                        rowBitmap.push_back("1");
                     } else {
-                        cBitmap += "0";
+                        rowBitmap.push_back("0");
                     }
                 }
-
-                bitset<8> set(cBitmap);
-                stringstream res;
-                res << hex << uppercase << set.to_ulong();
-                std::string hexCBitmap(res.str());
-                if (hexCBitmap.size() != 2)
-                    hexCBitmap = "0" + hexCBitmap;
-                hexCBitmap = "0x" + hexCBitmap;
-
-                glyphCBitmap += hexCBitmap + ", ";
+                glyphBitmap.push_back(rowBitmap);
             }
+            glyphsBitmap.push_back(glyphBitmap);
         }
 
-        glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
-                                + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
-        ++glyphIndex;
+        vector<QString> glyphsCBitmap;
+        size_t glyphIndex = 0;
+        for (vector<vector<vector<std::string>>>::const_iterator it = glyphsBitmap.begin();
+             it != glyphsBitmap.end(); ++it) {
+
+            std::string glyphCBitmap;
+            int verticalBytes = ceil(ROWS / 8.0);
+            for (int c = 0; c < COLS; ++c) {
+                for (int b = 0; b < verticalBytes; ++b) {
+                    std::string cBitmap;
+                    for (int r = (((b + 1) * 8) - 1); r >= (b * 8); --r) {
+                        if (r < ROWS) {
+                            cBitmap += (*it)[r][c];
+                        } else {
+                            cBitmap += "0";
+                        }
+                    }
+
+                    bitset<8> set(cBitmap);
+                    stringstream res;
+                    res << hex << uppercase << set.to_ulong();
+                    std::string hexCBitmap(res.str());
+                    if (hexCBitmap.size() != 2)
+                        hexCBitmap = "0" + hexCBitmap;
+                    hexCBitmap = "0x" + hexCBitmap;
+
+                    glyphCBitmap += hexCBitmap + ", ";
+                }
+            }
+
+            glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
+                                    + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
+            ++glyphIndex;
+        }
+
+        ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini LCD Font */\n")
+                                     % COLS % ROWS % (ceil(ROWS / 8.0) * COLS)).str().c_str());
+        for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
+             it != glyphsCBitmap.end(); ++it) {
+            ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+        }
     }
 
-    ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini LCD Font */\n")
-                                 % COLS % ROWS % (ceil(ROWS / 8.0) * COLS)).str().c_str());
-    for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
-         it != glyphsCBitmap.end(); ++it) {
-        ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+    catch(const Magick::ErrorDraw &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const Magick::Error &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const Magick::Exception &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const std::exception &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch (...) {
+        QMessageBox::critical(this, ERROR_TITLE, UNKNOWN_ERROR);
     }
 }
 
 void MainWindow::on_printerOutputPushButton_clicked()
 {
-    ui->outputTextEdit->clear();
+    try {
+        ui->outputTextEdit->clear();
 
-    const int COLS= ui->bitmapCharSizeWSpinBox->value();
-    const int ROWS = ui->bitmapCharSizeHSpinBox->value();
-    const double RATIO = (BASE_IMAGE_SIZE / COLS)
-            * ((double)COLS / (double)ROWS);
+        const int COLS= ui->bitmapCharSizeWSpinBox->value();
+        const int ROWS = ui->bitmapCharSizeHSpinBox->value();
+        const double RATIO = (BASE_IMAGE_SIZE / COLS)
+                * ((double)COLS / (double)ROWS);
 
-    size_t glyphsImagesCount = 0;
-    for (std::vector<QString>::const_iterator it = m_glyphs.begin();
+        size_t glyphsImagesCount = 0;
+        for (std::vector<QString>::const_iterator it = m_glyphs.begin();
              it != m_glyphs.end(); ++it) {
-        Image image(Geometry(COLS * RATIO, ROWS * RATIO),
-                    Color("white"));
-        list<Drawable> drawList;
-        drawList.push_back(DrawableTextAntialias(true));
-        drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
-        drawList.push_back(DrawablePointSize(BASE_IMAGE_SIZE - ui->charPaddingSpinBox->value()));
-        drawList.push_back(DrawableFillColor(Color("black")));
-        drawList.push_back(DrawableGravity(CenterGravity));
-        drawList.push_back(DrawableText(0, 0, it->toStdString(), "UTF-8"));
-        image.draw(drawList);
-        Geometry g(COLS, ROWS);
-        image.scale(g);
-        image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
-        ++glyphsImagesCount;
-    }
-
-    double tolerance = 1.0 - ui->colorToleranceDoubleSpinBox->value();
-    vector<vector<vector<std::string>>> glyphsBitmap;
-    for (size_t i = 0; i < glyphsImagesCount; ++i) {
-        vector<vector<std::string>> glyphBitmap;
-        Image image;
-        image.read(m_glyphFilePath.arg(i).toStdString());
-        size_t columns = image.columns();
-        size_t rows = image.rows();
-        PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
-        for (size_t row = 0; row < rows; ++row) {
-            vector<std::string> rowBitmap;
-            for (size_t column = 0; column < columns; ++column) {
-                ColorRGB color(pixels[columns * row + column]);
-                if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
-                    rowBitmap.push_back("1");
-                } else {
-                    rowBitmap.push_back("0");
-                }
-            }
-            glyphBitmap.push_back(rowBitmap);
+            Image image(Geometry(COLS * RATIO, ROWS * RATIO),
+                        Color("white"));
+            list<Drawable> drawList;
+            drawList.push_back(DrawableTextAntialias(true));
+            drawList.push_back(DrawableFont(ui->fontPathLineEdit->text().toStdString()));
+            drawList.push_back(DrawablePointSize((BASE_IMAGE_SIZE
+                                                  - (ui->charPaddingSpinBox->value()))
+                                                 * ui->charScalingDoubleSpinBox->value()));
+            drawList.push_back(DrawableFillColor(Color("black")));
+            drawList.push_back(DrawableGravity(CenterGravity));
+            drawList.push_back(DrawableRotation(ui->charRotationDoubleSpinBox->value()));
+            drawList.push_back(DrawableSkewX(ui->charSkewXDoubleSpinBox->value()));
+            drawList.push_back(DrawableSkewY(ui->charSkewYDoubleSpinBox->value()));
+            drawList.push_back(DrawableText(0, 0, it->toStdString(), "UTF-8"));
+            image.draw(drawList);
+            Geometry g(COLS, ROWS);
+            image.scale(g);
+            image.write(m_glyphFilePath.arg(glyphsImagesCount).toStdString());
+            ++glyphsImagesCount;
         }
-        glyphsBitmap.push_back(glyphBitmap);
-    }
 
-    vector<QString> glyphsCBitmap;
-    size_t glyphIndex = 0;
-    for (vector<vector<vector<std::string>>>::const_iterator it = glyphsBitmap.begin();
-         it != glyphsBitmap.end(); ++it) {
-
-        std::string glyphCBitmap;
-        int horizontalBytes = ceil(COLS / 8.0);
-        for (int r = 0; r < ROWS; ++r) {
-            for (int b = 0; b < horizontalBytes; ++b) {
-                std::string cBitmap;
-                for (int c = (b * 8); c < ((b + 1) * 8); ++c) {
-                    if (c < COLS) {
-                        cBitmap += (*it)[r][c];
+        double tolerance = 1.0 - ui->colorToleranceDoubleSpinBox->value();
+        vector<vector<vector<std::string>>> glyphsBitmap;
+        for (size_t i = 0; i < glyphsImagesCount; ++i) {
+            vector<vector<std::string>> glyphBitmap;
+            Image image;
+            image.read(m_glyphFilePath.arg(i).toStdString());
+            size_t columns = image.columns();
+            size_t rows = image.rows();
+            PixelPacket *pixels = image.getPixels(0, 0, columns, rows);
+            for (size_t row = 0; row < rows; ++row) {
+                vector<std::string> rowBitmap;
+                for (size_t column = 0; column < columns; ++column) {
+                    ColorRGB color(pixels[columns * row + column]);
+                    if (color.red() <= tolerance && color.green() <= tolerance && color.blue() <= tolerance) {
+                        rowBitmap.push_back("1");
                     } else {
-                        cBitmap += "0";
+                        rowBitmap.push_back("0");
                     }
                 }
-
-                bitset<8> set(cBitmap);
-                stringstream res;
-                res << hex << uppercase << set.to_ulong();
-                std::string hexCBitmap(res.str());
-                if (hexCBitmap.size() != 2)
-                    hexCBitmap = "0" + hexCBitmap;
-                hexCBitmap = "0x" + hexCBitmap;
-
-                glyphCBitmap += hexCBitmap + ", ";
+                glyphBitmap.push_back(rowBitmap);
             }
+            glyphsBitmap.push_back(glyphBitmap);
         }
 
-        glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
-                                + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
-        ++glyphIndex;
+        vector<QString> glyphsCBitmap;
+        size_t glyphIndex = 0;
+        for (vector<vector<vector<std::string>>>::const_iterator it = glyphsBitmap.begin();
+             it != glyphsBitmap.end(); ++it) {
+
+            std::string glyphCBitmap;
+            int horizontalBytes = ceil(COLS / 8.0);
+            for (int r = 0; r < ROWS; ++r) {
+                for (int b = 0; b < horizontalBytes; ++b) {
+                    std::string cBitmap;
+                    for (int c = (b * 8); c < ((b + 1) * 8); ++c) {
+                        if (c < COLS) {
+                            cBitmap += (*it)[r][c];
+                        } else {
+                            cBitmap += "0";
+                        }
+                    }
+
+                    bitset<8> set(cBitmap);
+                    stringstream res;
+                    res << hex << uppercase << set.to_ulong();
+                    std::string hexCBitmap(res.str());
+                    if (hexCBitmap.size() != 2)
+                        hexCBitmap = "0" + hexCBitmap;
+                    hexCBitmap = "0x" + hexCBitmap;
+
+                    glyphCBitmap += hexCBitmap + ", ";
+                }
+            }
+
+            glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
+                                    + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
+            ++glyphIndex;
+        }
+
+        ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini Printer Font */\n")
+                                     % ROWS % COLS % (ceil(COLS / 8.0) * ROWS)).str().c_str());
+        for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
+             it != glyphsCBitmap.end(); ++it) {
+            ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+        }
     }
 
-    ui->outputTextEdit->setText((format("/* %1%x%2% '%3% Byte(s)' AS600-mini Printer Font */\n")
-                                 % ROWS % COLS % (ceil(COLS / 8.0) * ROWS)).str().c_str());
-    for (vector<QString>::const_iterator it = glyphsCBitmap.begin();
-         it != glyphsCBitmap.end(); ++it) {
-        ui->outputTextEdit->setText(ui->outputTextEdit->toPlainText() + (*it) + "\n");
+    catch(const Magick::ErrorDraw &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const Magick::Error &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const Magick::Exception &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch(const std::exception &ex) {
+        QMessageBox::critical(this, ERROR_TITLE, ex.what());
+    }
+
+    catch (...) {
+        QMessageBox::critical(this, ERROR_TITLE, UNKNOWN_ERROR);
     }
 }
+

@@ -38,6 +38,10 @@ private slots:
     void on_bitmapCharSizeWSpinBox_valueChanged(int arg1);
     void on_bitmapCharSizeHSpinBox_valueChanged(int arg1);
     void on_charPaddingSpinBox_valueChanged(int arg1);
+    void on_charScalingDoubleSpinBox_valueChanged(double arg1);
+    void on_charRotationDoubleSpinBox_valueChanged(double arg1);
+    void on_charSkewXDoubleSpinBox_valueChanged(double arg1);
+    void on_charSkewYDoubleSpinBox_valueChanged(double arg1);
     void on_previewComboBox_currentIndexChanged(int index);
     void on_lcdOutputPushButton_clicked();
     void on_printerOutputPushButton_clicked();
