@@ -446,10 +446,10 @@ void MainWindow::on_printerOutputPushButton_clicked()
             for (std::vector<QString>::const_iterator it = m_glyphs.begin();
                  it != m_glyphs.end(); ++it) {
                 wstringstream code;
-                code << hex << uppercase << (size_t)it->toStdWString()[0];
+                code << hex << uppercase << i;
                 ui->outputBitmapCharsCodeTextEdit->setText(
                             QString::fromStdWString((wformat(L"%3%0x80,0x%1% // %2%\n")
-                             % code.str()
+                             % (code.str().size() == 2 ? code.str() : (L"0" + code.str()))
                              % it->toStdWString()
                              % ui->outputBitmapCharsCodeTextEdit->toPlainText().toStdWString()).str().c_str()));
                 ++i;
