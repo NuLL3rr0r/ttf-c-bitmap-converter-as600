@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <bitset>
 #include <exception>
 #include <sstream>
@@ -964,17 +965,31 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
     std::reverse(out_displayText.begin(), out_displayText.end());
 
     if (bEncode) {
-        std::string temp;
+        std::wstring temp;
         for (size_t i = 0; i < out_displayText.length(); ++i) {
-            /*std::stringstream ss;
-            ss << "0x";
-            ss << (size_t)ch;
-            ss << ";";*/
-
-            //temp += EncodeChar(str[i]);
+            wstringstream code;
+            size_t pos = 0;
+            bool found = false;
+            for (size_t c = 0; c < sizeof(s_glyphs) / sizeof(wchar_t); ++c) {
+                if (s_glyphs[c] == out_displayText[i]) {
+                    found = true;
+                    break;
+                }
+                ++pos;
+            }
+            if (!found) {
+                //pos = (size_t)out_displayText[i];
+            }
+            code << hex << uppercase << pos;
+            QString::fromStdWString((wformat(L"%2%0x80,0x%1%, ")
+                                        % (code.str().size() == 2
+                                           ? code.str() : (L"0" + code.str()))
+                                        % ui->outputBitmapCharsCodeTextEdit->toPlainText()
+                                     .toStdWString()).str().c_str());
+            temp += code.str();
         }
 
-        //out_displayText = StrToWStr(temp);
+        out_displayText = temp;
     }
 }
 
