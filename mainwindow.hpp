@@ -73,6 +73,7 @@ private slots:
     void on_previewComboBox_currentIndexChanged(int index);
     void on_lcdOutputPushButton_clicked();
     void on_printerOutputPushButton_clicked();
+    void on_convertButton_clicked();
 
 private:
     void Preview();

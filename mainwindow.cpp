@@ -778,6 +778,14 @@ void MainWindow::on_printerOutputPushButton_clicked()
     }
 }
 
+void MainWindow::on_convertButton_clicked()
+{
+    wstring output;
+    ConvertToDisplayUnicode(ui->sourceTextEdit->toPlainText().toStdWString(),
+                            output, ui->encodeCheckBox->isChecked());
+    ui->displayUnicodeTextTextEdit->setText(QString::fromStdWString(output));
+}
+
 void MainWindow::Preview()
 {
     try {
@@ -978,15 +986,15 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
                 ++pos;
             }
             if (!found) {
+                pos = 0;
                 //pos = (size_t)out_displayText[i];
             }
             code << hex << uppercase << pos;
-            QString::fromStdWString((wformat(L"%2%0x80,0x%1%, ")
-                                        % (code.str().size() == 2
-                                           ? code.str() : (L"0" + code.str()))
-                                        % ui->outputBitmapCharsCodeTextEdit->toPlainText()
-                                     .toStdWString()).str().c_str());
-            temp += code.str();
+            temp += (wformat(L"%2%0x80,0x%1%, ")
+                     % (code.str().size() == 2
+                        ? code.str() : (L"0" + code.str()))
+                     % ui->outputBitmapCharsCodeTextEdit->toPlainText()
+                  .toStdWString()).str().c_str();
         }
 
         out_displayText = temp;
