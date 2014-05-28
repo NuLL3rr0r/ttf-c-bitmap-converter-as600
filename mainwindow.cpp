@@ -3,9 +3,11 @@
 #include <exception>
 #include <sstream>
 #include <cmath>
+#include <boost/algorithm/string.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/utility.hpp>
 #include <Magick++.h>
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -973,6 +975,20 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
     }
 
     std::reverse(out_displayText.begin(), out_displayText.end());
+
+    std::vector<std::wstring> lines;
+    boost::split(lines, out_displayText, boost::is_any_of(L"\n"));
+
+    out_displayText.clear();
+    std::vector<std::wstring>::const_reverse_iterator lastLine = lines.rend();
+    if (lines.size() > 0)
+        --lastLine;
+    for (std::vector<std::wstring>::const_reverse_iterator rit
+         = lines.rbegin(); rit != lines.rend(); ++rit) {
+        out_displayText += (*rit);
+        if (rit != lines.rend() && rit != lastLine)
+            out_displayText += L'\n';
+    }
 
     if (bEncode) {
         std::wstring temp;
