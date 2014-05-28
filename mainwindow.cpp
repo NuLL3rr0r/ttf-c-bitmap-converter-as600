@@ -653,7 +653,7 @@ void MainWindow::on_printerOutputPushButton_clicked()
                 wstringstream code;
                 code << hex << uppercase << i;
                 ui->outputBitmapCharsCodeTextEdit->setText(
-                            QString::fromStdWString((wformat(L"%3%0x80,0x%1% // %2%\n")
+                            QString::fromStdWString((wformat(L"%3%0x80,0x%1%, // %2%\n")
                              % (code.str().size() == 2 ? code.str() : (L"0" + code.str()))
                              % it->toStdWString()
                              % ui->outputBitmapCharsCodeTextEdit->toPlainText().toStdWString()).str().c_str()));
@@ -913,20 +913,22 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
                     }
 
                     if (post == SPACE_GLYPH
-                            || m_glyphsMap.find(post) == m_glyphsMap.end())
+                            || m_glyphsMap.find(post) == m_glyphsMap.end()){
                         type = Glyph::Detached;
-                    else
+                    } else {
                         type = Glyph::Initial;
+                    }
                 }
 
                 if (isLastChar) {
                     pre = text[i - 1];
 
                     if (pre == SPACE_GLYPH
-                            || m_glyphsMap.find(pre) == m_glyphsMap.end())
-                        type = Glyph::Final;
-                    else
+                            || m_glyphsMap.find(pre) == m_glyphsMap.end()) {
                         type = Glyph::Detached;
+                    } else {
+                        type = Glyph::Final;
+                    }
                 }
             }
 
@@ -985,16 +987,19 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
                 }
                 ++pos;
             }
-            if (!found) {
-                pos = 0;
-                //pos = (size_t)out_displayText[i];
+            if (found) {
+                code << hex << uppercase << pos;
+                temp += (wformat(L"%2%0x80,0x%1%, ")
+                         % (code.str().size() == 2
+                            ? code.str() : (L"0" + code.str()))
+                         % ui->outputBitmapCharsCodeTextEdit->toPlainText()
+                      .toStdWString()).str().c_str();
+            } else {
+                temp += (wformat(L"%2%'%1%', ")
+                         % out_displayText[i]
+                         % ui->outputBitmapCharsCodeTextEdit->toPlainText()
+                      .toStdWString()).str().c_str();
             }
-            code << hex << uppercase << pos;
-            temp += (wformat(L"%2%0x80,0x%1%, ")
-                     % (code.str().size() == 2
-                        ? code.str() : (L"0" + code.str()))
-                     % ui->outputBitmapCharsCodeTextEdit->toPlainText()
-                  .toStdWString()).str().c_str();
         }
 
         out_displayText = temp;
