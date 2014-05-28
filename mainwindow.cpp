@@ -419,6 +419,10 @@ MainWindow::MainWindow(QWidget *parent) :
         for (size_t i = 0; i < len; ++i) {
             m_glyphs.push_back(QString::fromStdWString(wstring(1, s_glyphs[i])));
         }
+
+        for (size_t i = 32; i < 127; ++i) {
+            m_glyphs.push_back(QString::fromStdString(string(1, (char)i)));
+        }
     }
 
     {
@@ -747,7 +751,7 @@ void MainWindow::on_printerOutputPushButton_clicked()
             }
 
             glyphsCBitmap.push_back(QString::fromStdString(glyphCBitmap)
-                                    + " // " + QString::fromStdWString(wstring(1, s_glyphs[glyphIndex])));
+                                    + " // " + m_glyphs[glyphIndex]);
             ++glyphIndex;
         }
 
@@ -974,8 +978,6 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
         out_displayText += ch;
     }
 
-    //std::reverse(out_displayText.begin(), out_displayText.end());
-
     {
         wstring temp;
         wstring tempLtr;
@@ -1024,8 +1026,8 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
             wstringstream code;
             size_t pos = 0;
             bool found = false;
-            for (size_t c = 0; c < sizeof(s_glyphs) / sizeof(wchar_t); ++c) {
-                if (s_glyphs[c] == out_displayText[i]) {
+            for (size_t c = 0; c < m_glyphs.size(); ++c) {
+                if (m_glyphs[c].toStdWString()[0] == out_displayText[i]) {
                     found = true;
                     break;
                 }
