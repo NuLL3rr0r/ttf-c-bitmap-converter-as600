@@ -996,7 +996,7 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
                       .toStdWString()).str().c_str();
             } else {
                 temp += (wformat(L"%2%'%1%', ")
-                         % out_displayText[i]
+                         % (out_displayText[i] != L'\n' ? wstring(1, out_displayText[i]) : L"\\n")
                          % ui->outputBitmapCharsCodeTextEdit->toPlainText()
                       .toStdWString()).str().c_str();
             }
