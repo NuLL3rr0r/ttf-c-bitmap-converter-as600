@@ -445,7 +445,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     ui->setupUi(this);
-    //this->setFixedSize(483, 261);
+    this->setFixedSize(830, 461);
 
     for (std::vector<QString>::const_iterator it = m_glyphs.begin();
          it != m_glyphs.end(); ++it) {
