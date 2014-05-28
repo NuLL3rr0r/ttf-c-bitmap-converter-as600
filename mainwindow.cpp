@@ -974,20 +974,48 @@ void MainWindow::ConvertToDisplayUnicode(const std::wstring &text, std::wstring 
         out_displayText += ch;
     }
 
-    std::reverse(out_displayText.begin(), out_displayText.end());
+    //std::reverse(out_displayText.begin(), out_displayText.end());
 
-    std::vector<std::wstring> lines;
-    boost::split(lines, out_displayText, boost::is_any_of(L"\n"));
+    {
+        wstring temp;
+        wstring tempLtr;
+        bool foundLtr = false;
+        const wchar_t *end = s_glyphs + (sizeof(s_glyphs) / sizeof(wchar_t));
+        for (int i = out_displayText.size() - 1; i >= 0; --i) {
+            const wchar_t *glyph = std::find(s_glyphs,
+                                             end,
+                                             out_displayText[i]);
+            if (glyph != end) {
+                if (foundLtr) {
+                    std::reverse(tempLtr.begin(), tempLtr.end());
+                    temp += tempLtr;
+                    tempLtr.clear();
+                }
+                foundLtr = false;
+                temp += out_displayText[i];
+            } else {
+                foundLtr = true;
+                tempLtr += out_displayText[i];
+            }
+        }
 
-    out_displayText.clear();
-    std::vector<std::wstring>::const_reverse_iterator lastLine = lines.rend();
-    if (lines.size() > 0)
-        --lastLine;
-    for (std::vector<std::wstring>::const_reverse_iterator rit
-         = lines.rbegin(); rit != lines.rend(); ++rit) {
-        out_displayText += (*rit);
-        if (rit != lines.rend() && rit != lastLine)
-            out_displayText += L'\n';
+        out_displayText = temp;
+    }
+
+    {
+        std::vector<std::wstring> lines;
+        boost::split(lines, out_displayText, boost::is_any_of(L"\n"));
+
+        out_displayText.clear();
+        std::vector<std::wstring>::const_reverse_iterator lastLine = lines.rend();
+        if (lines.size() > 0)
+            --lastLine;
+        for (std::vector<std::wstring>::const_reverse_iterator rit
+             = lines.rbegin(); rit != lines.rend(); ++rit) {
+            out_displayText += (*rit);
+            if (rit != lines.rend() && rit != lastLine)
+                out_displayText += L'\n';
+        }
     }
 
     if (bEncode) {
