@@ -1,6 +1,6 @@
 1. Build the dependencies yourself or install bzip2, freetype, jbigkit, libintl, jpeg, libpng, libtiff, libwmf and zlib from GnuWin32. However, note that for freetype to be detected by configure, you must move the freetype directory out of GnuWin32\include\freetype2 and into GnuWin32\include.
 
-If linking against your own self-build libs then temporary rename 'libzlib.dll' to 'libz.dll'
+If linking against your own self-build libs then permanently rename 'libzlib.dll' to 'libz.dll'
 If linking against your own self-build libs then temporary rename 'libpng16d.dll' to 'libpng16.dll' for debug builds.
 
 2. In MSYS shell:
