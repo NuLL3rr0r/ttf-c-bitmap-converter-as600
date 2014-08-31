@@ -1,3 +1,8 @@
+/**
+ * @author  Mohammad S. Babaei <info@babaei.net>
+ */
+
+
 #include <fstream>
 #include <cstdlib>
 #include <windows.h>

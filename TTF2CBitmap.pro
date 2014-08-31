@@ -1,8 +1,5 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-04-22T14:27:48
-#
-#-------------------------------------------------
+# @author  Mohammad S. Babaei <info@babaei.net>
+
 
 QT       += core gui
 
