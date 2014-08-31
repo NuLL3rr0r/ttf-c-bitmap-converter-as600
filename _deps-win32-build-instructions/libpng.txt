@@ -1,3 +1,6 @@
+# @author  Mohammad S. Babaei <info@babaei.net>
+
+
 1. In the build directory:
 
     mkdir _debug _release

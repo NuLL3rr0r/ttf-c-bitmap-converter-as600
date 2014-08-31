@@ -1,3 +1,6 @@
+# @author  Mohammad S. Babaei <info@babaei.net>
+
+
 # NOTE: WE NEED MASM BEFORE PROCEED ANY FURTHER
 # https://svn.boost.org/trac/boost/ticket/7262
 
