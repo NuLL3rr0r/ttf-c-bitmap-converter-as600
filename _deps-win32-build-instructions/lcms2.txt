@@ -6,15 +6,14 @@
     mkdir _debug _release
 
     # debug build
-    cd _debug && ../configure --prefix=/d/build/_debug-lcms2 CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    cd _debug && ../configure --prefix=/d/build/_debug-lcms2 CFLAGS="-g3 -O0" CPPFLAGS="-g3 -O0" CXXFLAGS="-g3 -O0"
     make -j9 && make install
 
     # release build
-    cd _release && ../configure --prefix=/d/build/_release-lcms2 CPPFLAGS=-DNDEBUG
+    cd _release && ../configure --prefix=/d/build/_release-lcms2 CFLAGS="-DDEBUG" CPPFLAGS="-DDEBUG" CXXFLAGS="-DDEBUG"
     make -j9 && make install
 
 2. Copy the following:
     D:\build\release\include\* to our include dir
     D:\build\release\bin\*.dll to our rel-lib dir
     D:\build\debug\bin\*.dll to our deb-lib dir
-
