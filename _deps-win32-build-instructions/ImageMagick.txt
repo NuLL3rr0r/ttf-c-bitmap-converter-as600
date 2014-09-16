@@ -54,7 +54,7 @@ Cflags: -I${includedir}/freetype -I${includedir}
 
     # debug build
     # Q8
-    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_debug-ImageMagick CFLAGS="-DDEBUG -Ic:/GnuWin32/include" CPPFLAGS="-DDEBUG -Ic:/GnuWin32/include" CXXFLAGS="-DDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib" CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_debug-ImageMagick CFLAGS="-g3 -O0 -Ic:/GnuWin32/include" CPPFLAGS="-g3 -O0 -Ic:/GnuWin32/include" CXXFLAGS="-g3 -O0 -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib"
 
     # release build
     # Q8
