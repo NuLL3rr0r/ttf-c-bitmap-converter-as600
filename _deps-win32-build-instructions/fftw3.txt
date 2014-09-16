@@ -6,15 +6,14 @@
     mkdir _debug _release
 
     # _debug build
-    cd _debug && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/_debug-fftw3 CPPFLAGS=-DDEBUG CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    cd _debug && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/_debug-fftw3 CFLAGS="-g3 -O0" CPPFLAGS="-g3 -O0" CXXFLAGS="-g3 -O0"
     make -j9 && make install
 
     # release build
-    cd _release && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/_release-fftw3 CPPFLAGS=-DNDEBUG
+    cd _release && ../configure --with-our-malloc16 --with-windows-f77-mangling --enable-shared --disable-static --enable-threads --with-combined-threads --enable-portable-binary --enable-sse2 --with-incoming-stack-boundary=2 --prefix=/d/build/_release-fftw3 CFLAGS="-DDEBUG" CPPFLAGS="-DDEBUG" CXXFLAGS="-DDEBUG"
     make -j9 && make install
 
 2. Copy the following:
     D:\build\release\include\* to our include dir
     D:\build\release\bin\*.dll to our rel-lib dir
     D:\build\debug\bin\*.dll to our deb-lib dir
-
