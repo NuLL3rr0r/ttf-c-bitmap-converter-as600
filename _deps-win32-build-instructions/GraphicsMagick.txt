@@ -11,16 +11,16 @@ If linking against your own self-build libs then temporary rename 'libpng16d.dll
 
     # debug build
     # Q8
-    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --without-perl --disable-installed --prefix=/d/build/_debug-GraphicsMagick13 CPPFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug" CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --without-perl --disable-installed --prefix=/d/build/_debug-GraphicsMagick13 CFLAGS="-g3 -O0 -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CPPFLAGS="-g3 -O0 -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CXXFLAGS="-g3 -O0 -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug"
     # Q16
-    #cd debug && ../configure --enable-shared --disable-static --with-quantum-depth=16 --without-perl --disable-installed --prefix=/d/build/_debug-GraphicsMagick13 CPPFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug" CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    #cd debug && ../configure --enable-shared --disable-static --with-quantum-depth=16 --without-perl --disable-installed --prefix=/d/build/_debug-GraphicsMagick13 CFLAGS="-g3 -O0 -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CPPFLAGS="-g3 -O0 -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CXXFLAGS="-g3 -O0 -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/debug"
     make -j9 && make install
 
     # release build
     # Q8
-    cd _release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --without-perl --disable-installed --prefix=/d/build/_release-GraphicsMagick13 CPPFLAGS="-DNDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release"
+    cd _release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --without-perl --disable-installed --prefix=/d/build/_release-GraphicsMagick13 CFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CPPFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CXXFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release"
     # Q16
-    #cd release && ../configure --enable-shared --disable-static --with-quantum-depth=16 --without-perl --disable-installed --prefix=/d/build/_release-GraphicsMagick13 CPPFLAGS="-DNDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release"
+    #cd release && ../configure --enable-shared --disable-static --with-quantum-depth=16 --without-perl --disable-installed --prefix=/d/build/_release-GraphicsMagick13 CFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CPPFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" CXXFLAGS="-DDEBUG -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include -Id:/dev/TTF2CBitmap/_deps-win32/mingw/include/freetype" LDFLAGS="-Ld:/dev/TTF2CBitmap/_deps-win32/mingw/lib/release"
     make -j9 && make install
 
 
@@ -28,14 +28,13 @@ If linking against your own self-build libs then temporary rename 'libpng16d.dll
 
     # debug build
     # Q8
-    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_debug-GraphicsMagick13 CPPFLAGS="-DDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib" CFLAGS="-g -O0" CXXFLAGS="-g -O0"
+    cd _debug && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_debug-GraphicsMagick13 CFLAGS="-g3 -O0 -Ic:/GnuWin32/include" CPPFLAGS="-g3 -O0 -Ic:/GnuWin32/include" CXXFLAGS="-g3 -O0 -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib"
 
     # release build
     # Q8
-    cd _release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_release-GraphicsMagick13 CPPFLAGS="-DNDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib"
+    cd _release && ../configure --enable-shared --disable-static --with-quantum-depth=8 --with-magick-plus-plus --with-png --with-ttf --without-bzlib --without-dps --without-fpx --without-gs-font-dir --without-gslib --without-jbig --without-webp --without-jpeg --without-jp2 --without-lcms --without-lcms2 --without-lzma --without-perl --without-tiff --without-trio --without-windows-font-dir --without-wmf --without-x --without-xml --without-zlib --disable-installed --prefix=/d/build/_release-GraphicsMagick13 CFLAGS="-DDEBUG -Ic:/GnuWin32/include" CPPFLAGS="-DDEBUG -Ic:/GnuWin32/include" CXXFLAGS="-DDEBUG -Ic:/GnuWin32/include" LDFLAGS="-Lc:/GnuWin32/bin -Lc:/GnuWin32/lib"
 
 3. Copy the following:
     D:\build\release\include\* to our include dir
     D:\build\release\bin\*.dll to our rel-lib dir
     D:\build\debug\bin\*.dll to our deb-lib dir
-
